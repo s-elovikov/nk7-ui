@@ -9,6 +9,7 @@ using UnityEditor;
 
 namespace Nk7.UI
 {
+    [RequireComponent(typeof(GraphicRaycaster))]
     public sealed partial class Popup : AnimatedComponent
     {
         [SerializeField] private Container _overlay;
