@@ -15,6 +15,16 @@ namespace Nk7.UI
         public Vector3 StartScale { get; private set; } = AnimatorConstants.START_SCALE;
         public float StartAlpha { get; private set; } = AnimatorConstants.START_ALPHA;
 
+        public void SetGameObjectState(bool state)
+        {
+            gameObject.SetActive(state);
+        }
+
+        public void SetCanvasState(bool state)
+        {
+            Canvas.enabled = state;
+        }
+
         public void ResetPosition()
         {
             RectTransform.anchoredPosition3D = StartPosition;
@@ -37,6 +47,9 @@ namespace Nk7.UI
 
         public void ResetValues()
         {
+            SetGameObjectState(true);
+            SetCanvasState(true);
+
             ResetPosition();
             ResetRotation();
             ResetScale();
