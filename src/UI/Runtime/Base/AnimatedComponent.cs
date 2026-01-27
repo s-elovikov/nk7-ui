@@ -21,6 +21,9 @@ namespace Nk7.UI
         [SerializeField] private NotInteractableBehaviour _showBehaviour;
         [SerializeField] private NotInteractableBehaviour _hideBehaviour;
 
+        [Space(5)]
+        [SerializeField] private AnimationEndHandleType _animationFinishHandling;
+
         public AnimatedComponent()
         {
             Reset();
@@ -57,6 +60,8 @@ namespace Nk7.UI
                 return;
             }
 
+            HandleStartAnimation();
+
             await _showBehaviour.ExecuteAsync(_animatedContainer, cancellationToken,
                 OnShowStartEvent, OnShowFinishEvent);
         }
@@ -70,6 +75,8 @@ namespace Nk7.UI
 
             await _hideBehaviour.ExecuteAsync(_animatedContainer, cancellationToken,
                 OnHideStartEvent, OnHideFinishEvent);
+
+            HandleFinishAnimation();
         }
 
         public void ShowInstantly()
@@ -86,6 +93,44 @@ namespace Nk7.UI
         {
             _showBehaviour = new NotInteractableBehaviour(NotInteractableAnimationType.Show);
             _hideBehaviour = new NotInteractableBehaviour(NotInteractableAnimationType.Hide);
+        }
+
+        private void HandleFinishAnimation()
+        {
+            switch (_animationFinishHandling)
+            {
+                case AnimationEndHandleType.TurnOffCanvasComponent:
+                    _animatedContainer.SetCanvasState(false);
+                    break;
+
+                case AnimationEndHandleType.DestroyObject:
+                    Destroy(_animatedContainer.gameObject);
+                    break;
+
+                case AnimationEndHandleType.TurnOffGameObject:
+                    _animatedContainer.SetGameObjectState(false);
+                    break;
+
+                default:
+                    return;
+            }
+        }
+
+        private void HandleStartAnimation()
+        {
+            switch (_animationFinishHandling)
+            {
+                case AnimationEndHandleType.TurnOffCanvasComponent:
+                    _animatedContainer.SetCanvasState(true);
+                    break;
+
+                case AnimationEndHandleType.TurnOffGameObject:
+                    _animatedContainer.SetGameObjectState(true);
+                    break;
+
+                default:
+                    return;
+            }
         }
 
 		private void OnDestroy()

@@ -12,7 +12,6 @@ namespace Nk7.UI.Animations
         protected override int MaxTweensCount => 4;
 
         [SerializeField] private AlphaAnimationsContainer _animations;
-        [SerializeField] private AnimationEndHandleType _animationFinishHandling;
 
         public NotInteractableBehaviour(NotInteractableAnimationType animationType)
             : base(AnimationsUtils.GetAnimationType(animationType)) { }
@@ -23,8 +22,6 @@ namespace Nk7.UI.Animations
             {
                 return;
             }
-
-            HandleStartAnimation(animatedContainer);
 
             var endMoveValue = AnimatorUtils.GetMoveTo(animatedContainer.RectTransform,
                 _animations.Move, animatedContainer.StartPosition);
@@ -49,8 +46,6 @@ namespace Nk7.UI.Animations
 
             animatedContainer.ResetAlpha();
             Animator.InstantlyFade(animatedContainer.CanvasGroup, endFadeValue);
-
-            HandleFinishAnimation(animatedContainer);
         }
 
         public async UniTask ExecuteAsync(Container animatedContainer, CancellationToken cancellationToken = default,
@@ -60,8 +55,6 @@ namespace Nk7.UI.Animations
             {
                 return;
             }
-
-            HandleStartAnimation(animatedContainer);
 
             _onStartEvent.Invoke();
             onStartCallback?.Invoke();
@@ -128,8 +121,6 @@ namespace Nk7.UI.Animations
 
             _onFinishEvent.Invoke();
             onFinishCallback?.Invoke();
-
-            HandleFinishAnimation(animatedContainer);
         }
 
         protected override void Reset(AnimationType animationType)
@@ -137,44 +128,6 @@ namespace Nk7.UI.Animations
             _animations = new AlphaAnimationsContainer(animationType);
 
             base.Reset(animationType);
-        }
-
-        private void HandleFinishAnimation(Container animatedContainer)
-        {
-            switch (_animationFinishHandling)
-            {
-                case AnimationEndHandleType.TurnOffCanvasComponent:
-                    animatedContainer.SetCanvasState(false);
-                    break;
-
-                case AnimationEndHandleType.DestroyObject:
-                    UnityEngine.Object.Destroy(animatedContainer.gameObject);
-                    break;
-
-                case AnimationEndHandleType.TurnOffGameObject:
-                    animatedContainer.SetGameObjectState(false);
-                    break;
-
-                default:
-                    return;
-            }
-        }
-
-        private void HandleStartAnimation(Container animatedContainer)
-        {
-            switch (_animationFinishHandling)
-            {
-                case AnimationEndHandleType.TurnOffCanvasComponent:
-                    animatedContainer.SetCanvasState(true);
-                    break;
-
-                case AnimationEndHandleType.TurnOffGameObject:
-                    animatedContainer.SetGameObjectState(true);
-                    break;
-
-                default:
-                    return;
-            }
         }
     }
 }
