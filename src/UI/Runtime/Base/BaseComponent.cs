@@ -7,6 +7,7 @@ namespace Nk7.UI
     {
         [field: SerializeField] public RectTransform RectTransform { get; private set; }
         [field: SerializeField] public CanvasGroup CanvasGroup { get; private set; }
+        [field: SerializeField] public Canvas Canvas { get; private set; }
     }
 
 
@@ -22,6 +23,11 @@ namespace Nk7.UI
             if (CanvasGroup == null)
             {
                 CanvasGroup = GetComponent<CanvasGroup>();
+            }
+
+            if (Canvas == null)
+            {
+                Canvas = GetComponent<Canvas>();
             }
         }
     }

@@ -7,10 +7,7 @@ using UnityEditor;
 namespace Nk7.UI
 {
     [RequireComponent(typeof(Container), typeof(GraphicRaycaster))]
-    public sealed partial class View : AnimatedComponent
-    {
-
-    }
+    public sealed partial class View : AnimatedComponent { }
 
 
 #if UNITY_EDITOR
