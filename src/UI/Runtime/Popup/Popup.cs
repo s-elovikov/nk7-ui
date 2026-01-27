@@ -1,6 +1,4 @@
-using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
-using System.Threading;
 using UnityEngine.UI;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -13,31 +11,6 @@ namespace Nk7.UI
     public sealed partial class Popup : AnimatedComponent
     {
         [SerializeField] private Container _overlay;
-        [SerializeField] private bool _destroyAfterHide;
-
-        public async override UniTask HideAsync(CancellationToken cancellationToken = default)
-        {
-            await base.HideAsync(cancellationToken);
-
-            if (!_destroyAfterHide)
-            {
-                return;
-            }
-
-            Destroy(gameObject);
-        }
-
-        public override void HideInstantly()
-        {
-            base.HideInstantly();
-
-            if (!_destroyAfterHide)
-            {
-                return;
-            }
-
-            Destroy(gameObject);
-        }
     }
 
 
